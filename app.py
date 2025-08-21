@@ -5,6 +5,8 @@ import plotly.graph_objects as go
 import os
 from generate_report import create_report_pdf  
 
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+
 #Page Configuration
 st.set_page_config(
     page_title="Churn Prediction System",

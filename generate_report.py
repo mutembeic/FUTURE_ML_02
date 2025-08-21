@@ -2,6 +2,7 @@ from fpdf import FPDF
 from datetime import date
 import os
 
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 #Define a PDF class with Header and Footer 
 class PDF(FPDF):
     def header(self):
@@ -154,8 +155,8 @@ def add_recommendation(pdf, title, insight, action):
     )
     
     #Save the PDF 
-    report_folder = 'reports'
-    if not os.path.exists(report_folder):
+    report_folder = os.path.join(BASE_DIR, 'reports')
+    if not os.path.exists(report_folder, report_filename):
         os.makedirs(report_folder)
     
     report_filename = f'Churn_Prediction_Report_{date.today()}.pdf'
