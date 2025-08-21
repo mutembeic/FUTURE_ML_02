@@ -1,0 +1,73 @@
+/*Global Styling*/
+body {
+    color: #fafafa;  
+}
+
+/*Main App Container*/
+[data-testid="stAppViewContainer"] > .main {
+    background-color: #0e1117;  
+}
+
+/* Sidebar Styling */
+[data-testid="stSidebar"] > div:first-child {
+    background-color: #262730;  
+    border-right: 1px solid #444;
+}
+
+/*ALL Text in Sidebar (including labels) */
+[data-testid="stSidebar"] .st-emotion-cache-10oheav {
+    color: #FAFAFA !important;  
+}
+[data-testid="stSidebar"] label {
+     color: #FAFAFA !important;
+}
+
+
+/* Widget Styling */
+/* Selectbox and Input fields */
+div[data-baseweb="select"] > div, .stTextInput > div > div > input, .stNumberInput > div > div > input {
+    background-color: #1c1c1e;
+    color: #fafafa;
+    border: 1px solid #555;
+    border-radius: 5px;
+}
+
+/* Slider styling */
+.stSlider [data-baseweb="slider"] {
+    color: #00A6FF;
+}
+
+/* Button Styling*/
+.stButton>button {
+    border: 2px solid #00A6FF;
+    border-radius: 8px;
+    background-color: #00A6FF;
+    color: #0e1117;  
+    padding: 10px 24px;
+    font-size: 16px;
+    font-weight: bold;
+    transition: all 0.3s ease;
+}
+
+.stButton>button:hover {
+    background-color: transparent; 
+    color: #00A6FF;  
+    border-color: #00A6FF;
+}
+
+/*Header & Title Styling*/
+h1, h2, h3 {
+    color: #00A6FF;  
+    font-weight: 700;
+}
+
+/*Metric Card Styling on Dashboard*/
+[data-testid="stMetric"] {
+    background-color: #262730;
+    border: 1px solid #444;
+    border-radius: 10px;
+    padding: 15px;
+}
+[data-testid="stMetricLabel"] {
+    color: #aaa;  
+}
