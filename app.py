@@ -3,16 +3,16 @@ import pandas as pd
 import joblib
 import plotly.graph_objects as go
 import os
-from generate_report import create_report_pdf # Import our report function
+from generate_report import create_report_pdf  
 
-# --- Page Configuration ---
+#Page Configuration
 st.set_page_config(
     page_title="Churn Prediction System",
     page_icon="🚀",
     layout="wide"
 )
 
-# --- Custom CSS for Styling ---
+#Custom CSS for Styling 
 def load_css(file_name):
     with open(file_name) as f:
         st.markdown(f'<style>{f.read()}</style>', unsafe_allow_html=True)
@@ -23,7 +23,7 @@ if os.path.exists('.streamlit/style.css'):
 else:
     st.warning("Custom CSS file not found. App will use default styling.")
 
-# --- Load Model ---
+#  Load Model
 # Use st.cache_resource for one-time loading of heavy objects like models
 @st.cache_resource
 def load_model():
@@ -39,14 +39,14 @@ if pipeline is None:
     st.stop()
 
 
-# --- App Layout ---
+#App Layout 
 st.title('🚀 Customer Churn Prediction System')
 st.markdown("""
 Welcome to the interactive Churn Prediction dashboard. Use the sidebar to enter a customer's details and our AI model will predict their churn probability. 
 Navigate to the **Dashboard & Visualizations** page for an overview of churn drivers.
 """)
 
-# --- Sidebar for User Input ---
+#Sidebar for User Input 
 with st.sidebar:
     st.header('Customer Information')
 
@@ -79,7 +79,7 @@ with st.sidebar:
     user_inputs['SeniorCitizen'] = 1 if is_senior else 0
 
 
-# --- Main Area for Prediction Output and Report ---
+#Main Area for Prediction Output and Report 
 col1, col2 = st.columns([0.6, 0.4], gap="large")
 
 with col1:
@@ -89,7 +89,7 @@ with col1:
         prediction_proba = pipeline.predict_proba(input_df)[0]
         churn_probability = prediction_proba[1]
 
-        # --- NEW CODE: SAVE TO SESSION STATE ---
+        #SAVE TO SESSION STATE
         st.session_state['last_prediction_inputs'] = user_inputs
         st.session_state['last_prediction_probability'] = churn_probability
 

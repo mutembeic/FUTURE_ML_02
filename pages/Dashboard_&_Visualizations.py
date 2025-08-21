@@ -1,79 +1,3 @@
-# import streamlit as st
-# import pandas as pd
-# import plotly.express as px
-
-# st.set_page_config(page_title="Churn Visualizations", layout="wide")
-
-# st.title('📊 Churn Dashboard & Visualizations')
-# st.markdown("This page provides an interactive overview of the customer dataset, highlighting key factors related to churn.")
-
-# # Load the data
-# @st.cache_data
-# def load_data():
-#     df = pd.read_csv('data/raw/WA_Fn-UseC_-Telco-Customer-Churn.csv')
-#     # Basic cleaning
-#     df['TotalCharges'] = pd.to_numeric(df['TotalCharges'], errors='coerce')
-#     df.dropna(inplace=True)
-#     return df
-
-# df = load_data()
-
-# #Interactive Filters
-# st.sidebar.header("Dashboard Filters")
-# contract_filter = st.sidebar.multiselect(
-#     'Filter by Contract Type:',
-#     options=df['Contract'].unique(),
-#     default=df['Contract'].unique()
-# )
-# internet_filter = st.sidebar.multiselect(
-#     'Filter by Internet Service:',
-#     options=df['InternetService'].unique(),
-#     default=df['InternetService'].unique()
-# )
-
-# # Apply filters
-# df_selection = df.query(
-#     "Contract == @contract_filter & InternetService == @internet_filter"
-# )
-
-# #KPIs 
-# total_customers = df_selection.shape[0]
-# churn_rate = (df_selection['Churn'] == 'Yes').sum() / total_customers * 100
-# avg_monthly_charges = df_selection['MonthlyCharges'].mean()
-
-# col1, col2, col3 = st.columns(3)
-# with col1:
-#     st.metric("Total Customers", f"{total_customers:,}")
-# with col2:
-#     st.metric("Churn Rate", f"{churn_rate:.2f}%")
-# with col3:
-#     st.metric("Avg. Monthly Charge", f"${avg_monthly_charges:.2f}")
-
-# st.markdown("---")
-
-# #Visualizations 
-# col1, col2 = st.columns(2)
-
-# with col1:
-#     st.subheader("Churn by Contract Type")
-#     fig_contract = px.histogram(df_selection, x='Contract', color='Churn',
-#                                 barmode='group', text_auto=True,
-#                                 color_discrete_map={'Yes': '#d62728', 'No': '#1f77b4'})
-#     st.plotly_chart(fig_contract, use_container_width=True)
-
-# with col2:
-#     st.subheader("Churn by Internet Service")
-#     fig_internet = px.pie(df_selection, names='InternetService', hole=0.4,
-#                           title='Internet Service Distribution')
-#     st.plotly_chart(fig_internet, use_container_width=True)
-
-# st.subheader("Monthly Charges vs. Tenure by Churn")
-# fig_scatter = px.scatter(df_selection, x='tenure', y='MonthlyCharges', color='Churn',
-#                          title="Higher monthly charges for shorter tenures correlate with churn",
-#                          color_discrete_map={'Yes': '#d62728', 'No': '#1f77b4'})
-# st.plotly_chart(fig_scatter, use_container_width=True)
-
-
 import streamlit as st
 import pandas as pd
 import plotly.express as px
@@ -82,7 +6,7 @@ from sklearn.preprocessing import MinMaxScaler
 
 st.set_page_config(page_title="Churn Visualizations", layout="wide")
 
-# --- Load and Cache Data ---
+#Load and Cache Data 
 @st.cache_data
 def load_data():
     df = pd.read_csv('data/raw/WA_Fn-UseC_-Telco-Customer-Churn.csv')
@@ -93,7 +17,7 @@ def load_data():
 
 df = load_data()
 
-# --- Custom Styling (from your CSS) ---
+#Custom Styling 
 st.markdown(
     """
     <style>
@@ -113,14 +37,14 @@ st.markdown(
 st.title('📊 Churn Insights Dashboard')
 st.markdown("Analyze the key factors driving customer churn across different segments.")
 
-# --- Section for Predicted Customer Analysis ---
+# Section for Predicted Customer Analysis
 if 'last_prediction_inputs' in st.session_state:
     st.subheader("Analysis for Last Predicted Customer")
     
     last_customer = st.session_state['last_prediction_inputs']
     last_prob = st.session_state['last_prediction_probability']
     
-    # --- Data for Radar Chart ---
+    # Data for Radar Chart
     # Define features for comparison
     radar_features = ['tenure', 'MonthlyCharges', 'TotalCharges']
     
@@ -155,7 +79,7 @@ if 'last_prediction_inputs' in st.session_state:
       title="Predicted Customer Profile vs. Averages"
     )
     
-    # --- Display Predicted Customer Info and Radar Chart ---
+    #Display Predicted Customer Info and Radar Chart 
     col1, col2 = st.columns([1, 1])
     with col1:
         st.metric(label="Predicted Churn Probability", value=f"{last_prob:.1%}")
@@ -169,10 +93,10 @@ if 'last_prediction_inputs' in st.session_state:
     st.markdown("---")
 
 
-# --- Main Dashboard Section ---
+#Main Dashboard Section 
 st.subheader("Overall Customer Base Analysis")
 
-# --- Interactive Filters for the main dashboard ---
+#Interactive Filters for the main dashboard 
 st.sidebar.header("Dashboard Filters")
 contract_filter = st.sidebar.multiselect(
     'Filter by Contract Type:',
@@ -189,7 +113,7 @@ df_selection = df.query(
     "Contract == @contract_filter & InternetService == @internet_filter"
 )
 
-# --- KPIs ---
+#KPIs
 total_customers = df_selection.shape[0]
 churn_rate = (df_selection['Churn'] == 'Yes').sum() / total_customers * 100 if total_customers > 0 else 0
 avg_monthly_charges = df_selection['MonthlyCharges'].mean()
@@ -204,7 +128,7 @@ with kpi3:
 
 st.markdown("---")
 
-# --- Visualizations ---
+#Visualization
 col1, col2 = st.columns(2)
 with col1:
     st.write("#### Churn by Contract Type")

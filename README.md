@@ -80,7 +80,9 @@ The app has **3 pages**:
 - Interactive filters (e.g., Contract Type, Internet Service)  
 - KPIs (Total Customers, Churn Rate)  
 - Charts update dynamically  
-- **Radar chart** comparing individual predictions to average loyal vs churned customers  
+- **Radar chart** comparing individual predictions to average loyal vs churned customers 
+
+![Feature Importance](assets/Dashboard.png) 
 
 ### 📄 About the Project
 - Explains the **business problem**, dataset, methodology, and tools  
