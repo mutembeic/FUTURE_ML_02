@@ -1,7 +1,7 @@
 pandas
 numpy
-scikit-learn
-xgboost
+scikit-learn==0.23.2
+xgboost==2.1.4
 streamlit
 plotly
 fpdf2
