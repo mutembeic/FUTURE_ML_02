@@ -3,7 +3,8 @@ from datetime import date
 import os
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-#Define a PDF class with Header and Footer 
+
+# Define a PDF class with Header and Footer
 class PDF(FPDF):
     def header(self):
         self.set_font('helvetica', 'B', 15)
@@ -15,7 +16,7 @@ class PDF(FPDF):
         self.set_font('helvetica', 'I', 8)
         self.cell(0, 10, f'Page {self.page_no()}', 0, 0, 'C')
 
-#Helper functions to add content  
+# Helper functions to add content
 def add_title(pdf, text):
     pdf.set_font('helvetica', 'B', 16)
     pdf.set_text_color(22, 77, 129)
@@ -25,7 +26,6 @@ def add_title(pdf, text):
 
 def add_body_text(pdf, text):
     pdf.set_font('helvetica', '', 11)
-    # The .encode() logic is crucial for handling any non-standard characters in text
     cleaned_text = text.replace('**', '').encode('latin-1', 'replace').decode('latin-1')
     pdf.multi_cell(0, 6, cleaned_text)
     pdf.ln(3)
@@ -36,7 +36,6 @@ def add_tiered_insight(pdf, tier_title, points):
     pdf.ln(1)
     
     for point_title, point_text in points.items():
-        # Clean text by removing markdown and encoding
         cleaned_title = point_title.replace('**', '').encode('latin-1', 'replace').decode('latin-1')
         cleaned_text = point_text.replace('**', '').encode('latin-1', 'replace').decode('latin-1')
         
@@ -53,11 +52,9 @@ def add_recommendation(pdf, title, insight, action):
     pdf.set_font('helvetica', 'B', 12)
     pdf.multi_cell(0, 6, title.encode('latin-1', 'replace').decode('latin-1'))
     
-    # Clean text
     cleaned_insight = insight.replace('**', '').encode('latin-1', 'replace').decode('latin-1')
     cleaned_action = action.replace('**', '').encode('latin-1', 'replace').decode('latin-1')
 
-    # Use a single multi_cell with font changes for simplicity
     pdf.set_font('helvetica', 'B', 11)
     pdf.write(6, 'Insight: ')
     pdf.set_font('', '')
@@ -70,13 +67,13 @@ def add_recommendation(pdf, title, insight, action):
     pdf.multi_cell(0, 6, cleaned_action)   
     pdf.ln(5)
 
-
-#Main function to create the report  def create_report_pdf():
+# Main function to create the report
+def create_report_pdf():
     """Generates the PDF report and returns its file path."""
     pdf = PDF()
     pdf.add_page()
     
-    #1. Executive Summary
+    # 1. Executive Summary
     add_title(pdf, '1. Executive Summary')
     summary_text = (
         "This report outlines the development of an AI-powered churn prediction model designed to proactively identify customers at risk of leaving. "
@@ -86,16 +83,16 @@ def add_recommendation(pdf, title, insight, action):
     )
     add_body_text(pdf, summary_text)
 
-    #2. Key Drivers of Customer Churn 
+    # 2. Key Drivers of Customer Churn
     add_title(pdf, '2. Key Drivers of Customer Churn')
     add_body_text(pdf, "The predictive model identified the most influential factors in a customer's decision to churn. These drivers can be grouped into three strategic themes:")
     
-    feature_importance_path = 'reports/feature_importance.png'
+    feature_importance_path = os.path.join(BASE_DIR, 'reports', 'feature_importance.png')
     if os.path.exists(feature_importance_path):
         pdf.image(feature_importance_path, x=(210-160)/2, w=160)
         pdf.ln(5)
     else:
-        add_body_text(pdf, f"[Feature importance image not found at '{feature_importance_path}']")
+        add_body_text(pdf, f"[Image not found at '{feature_importance_path}']")
     
     add_tiered_insight(pdf, "Tier 1: Financial & Loyalty Core", {
         "TotalCharges & tenure:": " The customer's financial lifetime value and length of service are the strongest indicators of loyalty. New customers are the most vulnerable.",
@@ -113,11 +110,10 @@ def add_recommendation(pdf, title, insight, action):
 
     pdf.add_page()
 
-    #3. Predictive Model Performance
+    # 3. Predictive Model Performance
     add_title(pdf, '3. Predictive Model Performance')
     add_body_text(pdf, "An XGBoost model was selected for its superior predictive power. It provides a strong balance between identifying potential churners and avoiding false alarms.\n\nKey Metrics:")
     
-    # Use the tiered insight function for the metrics as well for consistent formatting
     add_tiered_insight(pdf, "", {
         "Accuracy:": " 79.1% (Overall correct predictions).",
         "Precision:": " 63.4% (When we predict a customer will churn, we are correct 63.4% of the time).",
@@ -127,7 +123,7 @@ def add_recommendation(pdf, title, insight, action):
     
     pdf.ln(5)
 
-    #4. Actionable Recommendations
+    # 4. Actionable Recommendations
     add_title(pdf, '4. Actionable Business Recommendations')
     
     add_recommendation(
@@ -154,9 +150,9 @@ def add_recommendation(pdf, title, insight, action):
         "Deploy a targeted survey to current and former fiber customers to diagnose the root cause. The issue could be related to pricing, reliability, or competitor offers. The findings should inform potential price adjustments or service improvements."
     )
     
-    #Save the PDF 
+    # Save the PDF 
     report_folder = os.path.join(BASE_DIR, 'reports')
-    if not os.path.exists(report_folder, report_filename):
+    if not os.path.exists(report_folder):
         os.makedirs(report_folder)
     
     report_filename = f'Churn_Prediction_Report_{date.today()}.pdf'
